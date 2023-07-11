@@ -13,6 +13,7 @@ const Search = () => {
     const location = useLocation()
     const [properties, setProperties] = useState([])
     const [loading, setLoading] = useState(false)
+    const [error, setError] = useState(false)
     const [query, setQuery] = useState({})
     useEffect(() => {
         const purpose = query.purpose || 'for-rent';
@@ -29,10 +30,16 @@ const Search = () => {
         fetchApi(`${baseUrl}/properties/list?locationExternalIDs=${locationExternalIDs}&purpose=${purpose}&categoryExternalID=${categoryExternalID}&bathsMin=${bathsMin}&rentFrequency=${rentFrequency}&priceMin=${minPrice}&priceMax=${maxPrice}&roomsMin=${roomsMin}&sort=${sort}&areaMax=${areaMax}`).then(({ data }) => {
             setProperties(data?.hits)
             setLoading(false)
-        }).catch(err => console.log(err));
+        }).catch((err) => {
+            console.log(err)
+            setLoading(false)
+            setError(true)
+        });
 
     }, [query])
-
+    if (error) {
+        return <p>there is something error</p>
+    }
 
     return (
         <Box>

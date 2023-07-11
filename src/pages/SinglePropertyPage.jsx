@@ -14,15 +14,23 @@ const SinglePropertyPage = () => {
     const { id } = useParams()
     const [loading, setLoading] = useState(false)
     const [properties, setProperties] = useState({})
+    const [error, setError] = useState(false)
     useEffect(() => {
         setLoading(true)
         fetchApi(`${baseUrl}/properties/detail?externalID=${id}`).then(({ data }) => {
             setProperties(data)
             setLoading(false)
-        }).catch((err) => console.log(err))
+        }).catch((err) => {
+            console.log(err)
+            setLoading(false)
+            setError(true)
+        })
     }, [])
     if (loading) {
         return <Loader />
+    }
+    if (error) {
+        return (<p>oops! there is something error</p>)
     }
     return (
 

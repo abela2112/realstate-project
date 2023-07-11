@@ -25,18 +25,27 @@ const Home = () => {
     const [propertiesForSale, setPropertiesForSale] = useState([])
     const [propertiesForRent, setPropertiesForRent] = useState([])
     const [loading, setLoading] = useState(false)
+    const [error, setError] = useState(false)
 
     useEffect(() => {
         setLoading(true)
         fetchApi(`${baseUrl}/properties/list?locationExternalIDs=5002&purpose=for-sale&hitsPerPage=6`).then(({ data }) => {
             setPropertiesForSale(data?.hits)
             setLoading(false)
-        }).catch(err => console.log(err));
+        }).catch(err => {
+            console.log(err)
+            setLoading(false)
+            setError(true)
+        });
 
         fetchApi(`${baseUrl}/properties/list?locationExternalIDs=5002&purpose=for-rent&hitsPerPage=6`).then(({ data }) => {
             setPropertiesForRent(data?.hits)
             setLoading(false)
-        }).catch(err => console.log(err));
+        }).catch(err => {
+            console.log(err)
+            setLoading(false)
+            setError(true)
+        });
 
     }, [])
 
@@ -60,6 +69,7 @@ const Home = () => {
                 {propertiesForRent.map(property => (
                     <Property property={property} key={property.id} />
                 ))}
+                {error && (<p>oops! there is something error</p>)}
             </Flex>}
             <Baner
                 purpose={"Buy A HOME"}
