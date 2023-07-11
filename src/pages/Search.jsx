@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Flex, Box, Text, Icon, Center } from '@chakra-ui/react'
+import { Flex, Box, Text, Icon, Center, Button, Link } from '@chakra-ui/react'
 import { BsFilter } from 'react-icons/bs'
 import SearchFilter from '../components/SearchFilter'
 import { useLocation } from 'react-router-dom'
@@ -8,6 +8,7 @@ import { Image } from '@chakra-ui/react'
 import noresult from '../assets/noresult.svg'
 import { fetchApi, baseUrl } from '../utils/fetchapi'
 import Loader from '../components/loader/Loader'
+import Error from '../components/Error'
 const Search = () => {
     const [searchFilter, setSearchFilter] = useState(false)
     const location = useLocation()
@@ -37,14 +38,11 @@ const Search = () => {
         });
 
     }, [query])
-    if (error) {
-        return <p>there is something error</p>
-    }
+
 
     return (
-        <Box>
+        <Box w={'1280px'}>
             <Flex
-                width={'full'}
                 bg={'grey.500'}
                 justifyContent={'center'}
                 alignItems={'center'}
@@ -67,15 +65,16 @@ const Search = () => {
                 }
 
             </Text>
-            {loading ? <Loader /> : <div>  <Flex flexWrap={'wrap'} justifyContent={'center'} alignItems={'center'}>{properties?.map((property) => (
-                <Property property={property} key={property.id} />
-            ))}</Flex>
-                {properties.length === 0 && (
-                    <Flex justifyContent={'center'} alignItems={'center'} >
-                        <Image src={noresult} />
-                        <Text fontSize={'2xl'} marginTop={3}>No Result Found</Text>
-                    </Flex>
-                )}</div>}
+            {loading ? <Loader /> : (error ? <Error />
+                : <div>  <Flex flexWrap={'wrap'} justifyContent={'center'} alignItems={'center'}>{properties?.map((property) => (
+                    <Property property={property} key={property.id} />
+                ))}</Flex>
+                    {properties.length === 0 && (
+                        <Flex justifyContent={'center'} alignItems={'center'} >
+                            <Image src={noresult} />
+                            <Text fontSize={'2xl'} marginTop={3}>No Result Found</Text>
+                        </Flex>
+                    )}</div>)}
         </Box>
     )
 }

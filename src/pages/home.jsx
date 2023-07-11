@@ -5,6 +5,7 @@ import { fetchApi, baseUrl } from '../utils/fetchapi'
 import Property from '../components/Property'
 import Navbar from '../components/Navbar'
 import Loader from '../components/loader/Loader'
+import Error from '../components/Error'
 const Baner = ({ purpose, desc1, desc2, title1, title2, buttonText, linkname, imgUrl }) => (
     <Flex flexWrap={'wrap'} justifyContent={'center'} alignItems={'center'} m={3}>
 
@@ -69,7 +70,7 @@ const Home = () => {
                 {propertiesForRent.map(property => (
                     <Property property={property} key={property.id} />
                 ))}
-                {error && (<p>oops! there is something error</p>)}
+                {error && (<Error />)}
             </Flex>}
             <Baner
                 purpose={"Buy A HOME"}
@@ -86,6 +87,7 @@ const Home = () => {
                 {propertiesForSale.map(property => (
                     <Property property={property} key={property.id} />
                 ))}
+                {error && (<Error />)}
             </Flex>}
         </div>
     )
